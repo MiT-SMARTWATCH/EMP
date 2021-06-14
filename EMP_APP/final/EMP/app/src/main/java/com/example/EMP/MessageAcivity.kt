@@ -37,26 +37,26 @@ class MessageAcivity : AppCompatActivity() {
         setContentView(R.layout.activity_message)
         val stopButton : Button = findViewById(R.id.stopButton)
 
-
+        //Mainactivity에서 화면전환 받았을때
+        //같이 전송된 데이터를 이용
         val intent = intent
+        val prediction = intent.extras?.get("상태")
 
-        val a = intent.extras?.get("상태")
-
-        if (a==17.0){
+        if (prediction==17.0){
             if (mediaPlayer == null) {  // 재생음악 중복 방지 코드, null일때만 초기화
                 mediaPlayer = MediaPlayer.create(this, R.raw.sound1)  // play버튼 클릭시 미디어플레이어 초기화 및 재생
                 Toast.makeText(this@MessageAcivity, "***위급상황입니다***", Toast.LENGTH_LONG).show()
             }
             mediaPlayer?.start()
 
-            if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED)
+            if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) // 퍼미년 sms 부여 조건문
             {
                 ActivityCompat.requestPermissions(this,
                     arrayOf(android.Manifest.permission.RECEIVE_SMS, android.Manifest.permission.SEND_SMS),
-                    111)
+                    111) //requestcode 111 생성
             }
             else
-                receiveMsg()
+                receiveMsg()  // 그밖에 receiveMessage
 
             val button:Button=findViewById(R.id.button)
             val editTextPhone : EditText =findViewById(R.id.editTextPhone)
@@ -66,7 +66,7 @@ class MessageAcivity : AppCompatActivity() {
             editTextTextMultiLine.text.append("위급상황입니다")
 
 
-            var sms = SmsManager.getDefault()
+            var sms = SmsManager.getDefault()   // sms 변서값 지정
             sms.sendTextMessage(editTextPhone.text.toString(), "ME", editTextTextMultiLine.text.toString(), null, null)
 
         }
@@ -115,7 +115,7 @@ class MessageAcivity : AppCompatActivity() {
 
 
 
-    private fun receiveMsg(){
+    private fun receiveMsg(){   // receiveMessage 함수 생성
 
         val editTextPhone : EditText =findViewById(R.id.editTextPhone)
         val editTextTextMultiLine : EditText =findViewById(R.id.editTextTextMultiLine)

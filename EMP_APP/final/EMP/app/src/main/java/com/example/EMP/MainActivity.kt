@@ -19,17 +19,17 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    var list = mutableListOf<Any>()
 
-
+    //모델을 한번 만 만들기 위한 변수
     var first = true
 
-
+    //train, test, cross validate setting 에 관련된 변수들
     val numfolds = 10
     val numfold = 0
     val seed = 1
 
 
+    // data loader (훈련 데이터와 텍스트 데이터를 기본 8:2 로 분리한다.)
     var data: Instances = Instances(
         BufferedReader(
             FileReader("/data/data/com.example.EMP/files/activity_recognition.arff")
@@ -37,20 +37,16 @@ class MainActivity : AppCompatActivity() {
     )
 
 
+    //train,test를 만듦
     private val train = data.trainCV(numfolds, numfold)
     private val test = data.testCV(numfolds, numfold)
 
+    // evaluate
     private val eval: Evaluation by lazy {
         Evaluation(test)
     }
+    // BayesNet
     private val model: Classifier = BayesNet()
-
-    private val textview1: EditText by lazy {
-        findViewById(R.id.textview1)
-    }
-    private val button1: Button by lazy {
-        findViewById<Button>(R.id.button1)
-    }
 
     fun serviceStart(view: Unit) {
         //서비스 시작 버튼 함수 설정-> 실행시 포그라운드 실행
@@ -68,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //포그라운드 실행
         serviceStart(setContentView(R.layout.activity_main))
 
 
@@ -77,50 +74,41 @@ class MainActivity : AppCompatActivity() {
         }, 6000) // 6초 정도 딜레이를 준 후 시작
 
 
-
     }
 
+    //분석을 하고 한 후에는 MessageActivity로 전환
     private fun onCreateClassifier(): String {
 
 
         if (first) {
 
+            //class assigner
             data.setClassIndex(data.numAttributes() - 1)
-
             train.setClassIndex(train.numAttributes() - 1)
             test.setClassIndex(test.numAttributes() - 1)
 
+            //cross validate setting
             eval.crossValidateModel(model, train, numfolds, Random(seed.toLong()))
+            // BayesNet run
             model.buildClassifier(train)
+            // BayesNet evaluate
             eval.evaluateModel(model, test)
+            //BayesNet 다시 만들지 않음
             first = false
         }
 
 
-        for ((k, instance) in data.withIndex()) {
-
-            val actual: Double = instance.classValue()
-            val prediction: Double = eval.evaluateModelOnce(model, instance)
-
-
-            if (prediction != actual) {
-                val list1 = mutableListOf(k, actual, "$prediction *")
-                list.add(k, list1)
-            } else {
-                val list1 = mutableListOf(k, actual, prediction)
-                list.add(k, list1)
-            }
-
-
-        }
 
         val list_prediction = mutableListOf<Any>()
+        //임의의 수를 넘어줌
         var prediction: Double = 3.0
 
         for (i in 0 until data.size) {
+            // 하나의 인스턴스를 받고 예측
             var a: Instance = data.instance(i)
             prediction = eval.evaluateModelOnce(model, a)
 
+            //3이 나올경우 저장
             if (prediction == 3.0) {
                 list_prediction.add(i)
 
@@ -129,13 +117,15 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        // 사이즈가 5를 넘으면 화면 전환하면서
+        //Key는 "상태", value는 prediction이라는 데이터도 같이 전송
         if (list_prediction.size > 5) {
 
             var alarm_intent = Intent(this, MessageAcivity::class.java)
             alarm_intent.putExtra("상태", prediction)
 
             startActivity(alarm_intent)
-            // 5개가 넘어가면 그 파이
+
         }
         return list_prediction.toString()
     }
