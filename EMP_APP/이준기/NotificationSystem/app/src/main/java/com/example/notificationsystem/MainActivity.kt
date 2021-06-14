@@ -52,21 +52,21 @@ class MainActivity : AppCompatActivity() {
             mediaPlayer = null
 
         }
-        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED)
+        if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED)  // 퍼미년 sms 부여 조건문
         {
             ActivityCompat.requestPermissions(this,
                 arrayOf(android.Manifest.permission.RECEIVE_SMS, android.Manifest.permission.SEND_SMS),
-                111)
+                111)   //requestcode 111 생성
         }
         else
-            receiveMsg()
+            receiveMsg()           // 그밖에 receiveMessage
 
         val button:Button=findViewById(R.id.button)
-        val editTextPhone : EditText =findViewById(R.id.editTextPhone)
-        val editTextTextMultiLine : EditText =findViewById(R.id.editTextTextMultiLine)
+        val editTextPhone : EditText=findViewById(R.id.editTextPhone)
+        val editTextTextMultiLine : EditText=findViewById(R.id.editTextTextMultiLine)
 
-        button.setOnClickListener {
-            var sms = SmsManager.getDefault()
+        button.setOnClickListener {     // 버튼 클릭시
+            var sms = SmsManager.getDefault()   // sms 변서값 지정
             sms.sendTextMessage(editTextPhone.text.toString(), "ME", editTextTextMultiLine.text.toString(), null, null)
         }
 
@@ -86,10 +86,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun receiveMsg(){
+    private fun receiveMsg(){  // receiveMessage 함수 생성
 
-        val editTextPhone : EditText =findViewById(R.id.editTextPhone)
-        val editTextTextMultiLine : EditText =findViewById(R.id.editTextTextMultiLine)
+        val editTextPhone : EditText=findViewById(R.id.editTextPhone)
+        val editTextTextMultiLine : EditText=findViewById(R.id.editTextTextMultiLine)
 
         var br = object: BroadcastReceiver(){
             override fun onReceive(p0: Context?, p1: Intent?) {
@@ -97,7 +97,6 @@ class MainActivity : AppCompatActivity() {
                     for(sms in Telephony.Sms.Intents.getMessagesFromIntent(p1)){
                         editTextPhone.setText(sms.originatingAddress)
                         editTextTextMultiLine.setText(sms.displayMessageBody)
-
 
 
 
