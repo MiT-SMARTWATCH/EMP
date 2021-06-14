@@ -1,4 +1,4 @@
-package com.example.weka2
+package com.example.EMP
 
 import android.content.Intent
 import android.os.Bundle
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     var data: Instances = Instances(
         BufferedReader(
-            FileReader("/data/data/com.example.weka2/files/activity_recognition.arff")
+            FileReader("/data/data/com.example.EMP/files/activity_recognition.arff")
         )
     )
 

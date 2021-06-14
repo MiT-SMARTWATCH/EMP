@@ -1,4 +1,4 @@
-package com.example.weka2
+package com.example.EMP
 
 import org.junit.Test
 

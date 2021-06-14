@@ -1,6 +1,5 @@
-package com.example.weka2
+package com.example.EMP
 
-import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -61,7 +60,7 @@ class MessageAcivity : AppCompatActivity() {
 
             val button:Button=findViewById(R.id.button)
             val editTextPhone : EditText =findViewById(R.id.editTextPhone)
-            editTextPhone.text.append("+15555215554")
+            editTextPhone.text.append("+821068011882")
 
             val editTextTextMultiLine : EditText =findViewById(R.id.editTextTextMultiLine)
             editTextTextMultiLine.text.append("위급상황입니다")

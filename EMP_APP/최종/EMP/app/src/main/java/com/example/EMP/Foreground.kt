@@ -1,4 +1,4 @@
-package com.example.weka2
+package com.example.EMP
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,9 +7,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.view.View
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 
 class Foreground : Service() {
 
