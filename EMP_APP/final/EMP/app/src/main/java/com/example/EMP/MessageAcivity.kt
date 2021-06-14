@@ -35,6 +35,8 @@ class MessageAcivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message)
+        serviceStart(setContentView(R.layout.activity_message))
+
         val stopButton : Button = findViewById(R.id.stopButton)
 
         //Mainactivity에서 화면전환 받았을때
